@@ -1,6 +1,6 @@
 ![img](https://i.chzbgr.com/thumb800/3899653/h75CA01C6/a-funny-list-of-owl-memes)
 
-# MIRAQL, a REST API service for managing OWL Ontologies via SPARQL
+# MIRAQL, a REST API service for Git-based managing OWL Ontologies via SPARQL with
 This component provides an API to manipulate a network of ontology files using SPARQL update queries
 
 ## REST API service example
