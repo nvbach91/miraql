@@ -1,0 +1,26 @@
+server:
+  contextPath: /miraql
+  port: 8080
+
+microservice:
+  swagger:
+    name: MIRAQL
+    description: This component acts as an API for creating git review-based modifications of owl files
+  oauth2:
+    enabled: false
+
+
+endpoints:
+  info:
+    enabled: true
+
+info.app:
+  kubeEnv:     ${KUBE_ENV}
+  podName:     ${POD_NAME}
+  version:     ${version}
+
+logging:
+  level:
+    ROOT: WARN
+    org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter: ERROR    
+    org.apache.jena.riot: ERROR

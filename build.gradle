@@ -1,0 +1,160 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.7.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+plugins {
+	id "org.sonarqube" version "2.5"
+}
+
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'jacoco'
+
+jar {
+	baseName = 'miraql'
+	from "${buildDir}/classes/generated"
+}
+
+group = 'cz.vse'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+}
+
+configurations {
+	swagger
+	componentTestCompile.extendsFrom testCompile
+	componentTestRuntime.extendsFrom testRuntime
+	smokeTestCompile.extendsFrom testCompile
+	smokeTestRuntime.extendsFrom testRuntime
+}
+
+sourceSets {
+	generated {
+		java.srcDirs += "${buildDir}/src/generated/java"
+	}
+	componentTest {
+		java {
+			compileClasspath += main.output + configurations.compileOnly
+			runtimeClasspath += main.output + configurations.compileOnly
+			srcDir file('src/componenttest/java')
+		}
+		resources.srcDir file('src/componenttest/resources')
+	}
+	smokeTest {
+		java {
+			compileClasspath += main.output + configurations.compileOnly
+			runtimeClasspath += main.output + configurations.compileOnly
+			srcDir file('src/smoketest/java')
+		}
+		resources.srcDir file('src/smoketest/resources')
+	}
+}
+
+dependencies {
+	compile sourceSets.generated.output
+	compile configurations.generatedCompile
+	componentTestCompile sourceSets.generated.output
+	componentTestCompile configurations.generatedCompile
+	componentTestCompile sourceSets.main.output
+	componentTestCompile sourceSets.test.output
+	smokeTestCompile sourceSets.generated.output
+	smokeTestCompile configurations.generatedCompile
+	smokeTestCompile sourceSets.main.output
+	smokeTestCompile sourceSets.test.output
+	compile('org.springframework.boot:spring-boot-starter-actuator')
+	//compile('org.springframework.boot:spring-boot-starter-web')
+	compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.16.18'
+	compile group: 'com.google.guava', name: 'guava', version: '27.0.1-jre'
+
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile('org.springframework:spring-tx:4.3.4.RELEASE')
+
+
+	generatedCompile 'io.swagger:swagger-annotations:1.5.8'
+	generatedCompile 'com.google.code.gson:gson:2.6.2'
+	generatedCompile 'com.squareup.okhttp:okhttp:2.7.5'
+	generatedCompile 'com.squareup.okhttp:logging-interceptor:2.7.5'
+	generatedCompile 'joda-time:joda-time:2.9.3'
+
+	swagger group: 'io.swagger', name: 'swagger-codegen-cli', version: '2.2.1'
+
+	compile group: 'info.cukes', name: 'cucumber-java', version: '1.2.5'
+	componentTestCompile group: 'info.cukes', name: 'cucumber-junit', version: '1.2.5'
+	componentTestCompile group: 'info.cukes', name: 'cucumber-spring', version: '1.2.5'
+	componentTestCompile group: 'junit', name: 'junit', version: '4.12'
+
+	smokeTestCompile group: 'info.cukes', name: 'cucumber-junit', version: '1.2.5'
+	smokeTestCompile group: 'info.cukes', name: 'cucumber-spring', version: '1.2.5'
+	smokeTestCompile group: 'junit', name: 'junit', version: '4.12'
+
+	compile 'com.google.code.gson:gson:2.8.2'
+
+	compile 'org.apache.jena:jena-core:3.13.1'
+	compile 'org.apache.jena:jena-arq:3.13.1'
+	compile 'org.apache.jena:apache-jena-libs:3.13.1'
+	compile 'net.sourceforge.owlapi:owlapi-distribution:5.1.11'
+	compile 'com.github.owlcs:ontapi:2.0.0'
+	compile 'org.eclipse.jgit:org.eclipse.jgit:5.5.0.201909110433-r'
+}
+
+jacocoTestReport {
+	reports {
+		html.destination "${buildDir}/jacoco/html"
+	}
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '4.10.3'
+	distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
+}
+
+task generateApiClientFromSwagger {
+	ext.srcFile = new File('src/main/resources/swagger.yml')
+	ext.tempDir = new File(buildDir, 'swagger/api/')
+	ext.destDir = new File("${buildDir}/src/generated/")
+	outputs.dir ext.destDir
+	inputs.file ext.srcFile
+	group('build')
+}
+
+def generateCodeFromSwagger(File swaggerSpec, File tempDir, File destDir, String targetPackage) {
+	javaexec {
+		main = 'io.swagger.codegen.SwaggerCodegen'
+		classpath = configurations.swagger
+		args = [
+				'generate',
+				'-i', swaggerSpec,
+				'-l', 'java',
+				'-o', tempDir,
+				'--model-package', "${targetPackage}.apimodel",
+				'--api-package', "${targetPackage}.api"
+		]
+	}
+	copy {
+		from "${tempDir}/src/main/"
+		into destDir
+		include '**/*.java'
+
+	}
+}
+
+compileJava {
+	dependsOn.add(generateApiClientFromSwagger)
+}

@@ -1,0 +1,31 @@
+swagger: '2.0'
+schemes:
+  - https
+basePath: /miraql
+produces:
+  - application/json
+info:
+  title: MIRAQL
+  version: "0.1"
+  description: |
+    # Todo: Describe..
+
+    # API Versioning
+
+      ## What constitutes an API version
+      API versions are raised only on breaking (i.e. backwards incompatible) changes in the API. Fields MAY be added but will never be removed during an API version lifecycle. Client developers should thus prepare their client app's for the possibility of added fields (in which case the schemas will also be updated to reflect this).
+
+      ## Providing API version
+      API version is provided in the base of the requested URL in the form of "v1", "v2" etc. Only major version numbers are used.
+
+paths:
+  /:
+    get:
+      summary: |
+        Dummy.
+      description: |
+        Dummy.
+      responses:
+        200:
+          description: |
+            Dummy.
