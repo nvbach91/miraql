@@ -1,5 +1,7 @@
 # Ontology Editors
 
+See also timeline https://time.graphics/line/375311
+
 |     Ontology editor and tools    |     Release year    |
 |-|:-:|
 |     PROTÉGÉ 0    |     1989    |
