@@ -30,6 +30,7 @@ Params
 
 
 ### Concept
+![git-integration](https://user-images.githubusercontent.com/20724910/121687623-da4ede00-cac2-11eb-85ab-dcfb0f14c572.jpg)
 
 ![image](https://user-images.githubusercontent.com/20724910/104810979-a1069080-57f8-11eb-8d8e-cf08fdbda4fa.png)
 
