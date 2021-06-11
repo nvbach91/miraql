@@ -1,4 +1,4 @@
-![img](https://i.chzbgr.com/thumb800/3899653/h75CA01C6/a-funny-list-of-owl-memes)
+<!-- ![img](https://i.chzbgr.com/thumb800/3899653/h75CA01C6/a-funny-list-of-owl-memes) -->
 
 # MIRAQL, a REST API service for agile Git-based management of OWL Ontologies via SPARQL
 This component provides an API to manipulate a network of ontology files using SPARQL update queries
@@ -32,6 +32,16 @@ Params
 ### Concept
 
 ![image](https://user-images.githubusercontent.com/20724910/104810979-a1069080-57f8-11eb-8d8e-cf08fdbda4fa.png)
+
+![architecture-1](https://user-images.githubusercontent.com/20724910/121686959-1766a080-cac2-11eb-9775-a8b51c144e90.jpg)
+
+<!-- ![collaborative-environment-1](https://user-images.githubusercontent.com/20724910/121686970-19c8fa80-cac2-11eb-956b-629655e3d592.jpg) -->
+
+![components-1](https://user-images.githubusercontent.com/20724910/121686985-1cc3eb00-cac2-11eb-925f-1e5c557eea8a.jpg)
+
+![usecases-1](https://user-images.githubusercontent.com/20724910/121686992-1f264500-cac2-11eb-9c24-37d94cc94bdf.jpg)
+
+![workflow-1](https://user-images.githubusercontent.com/20724910/121687004-21889f00-cac2-11eb-9faf-f412609f39fa.jpg)
 
 
 ### Front-end JS code examples
